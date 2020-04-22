@@ -13,7 +13,7 @@ const kategorije = [
   "Stolarija",
   "Odjeca",
 ];
-
+let duzinaProizvoda = 0;
 $(document).ready(function () {
   getProducts();
 });
@@ -21,6 +21,7 @@ async function getProducts() {
   var dataref = firebase.database();
   var proizvodiRef = dataref.ref("proizvodi");
   const snapshot = await proizvodiRef.once("value");
+  duzinaProizvoda = snapshot.val().length;
   krerajListuProizvoda(snapshot.val(), kategorije);
 }
 function krerajListuProizvoda(proizvodi, kategorije) {
@@ -40,18 +41,24 @@ function krerajListuProizvoda(proizvodi, kategorije) {
   container.html(html);
   proizvodi.map((item, index) =>
     $("#proizvod-" + item.id).click(function () {
-      urediProizvod("proizvod-", item, true);
+      urediProizvod("proizvod-", item, true, index);
     })
   );
   dodajProizvod();
 }
 
-function urediProizvod(sufiks, proizvod, jeEditovanje) {
+function urediProizvod(sufiks, proizvod, jeEditovanje, index) {
   const container = $("#forma-uredjivanje");
   if (container.css("display") === "none") {
     $("#zatvori-uredjivanje").click(function () {
       container.css({ display: "none" });
+      container.trigger("reset");
     });
+    for (let i = 0; i < 5; i++) {
+      const element = $("#" + sufiks + Object.getOwnPropertyNames(proizvod)[i]);
+      element.val("");
+    }
+
     container.css({ display: "flex" });
     if (jeEditovanje) {
       for (let i = 0; i < 5; i++) {
@@ -59,16 +66,22 @@ function urediProizvod(sufiks, proizvod, jeEditovanje) {
           "#" + sufiks + Object.getOwnPropertyNames(proizvod)[i]
         );
         element.val(Object.values(proizvod)[i]);
-        element.on("input", function () {
-          console.log($(this).attr("name"), " :", $(this).val());
-        });
       }
     }
     $("#potvrdi-uredjivanje").click(function () {
       var dataref = firebase.database();
-      var proizvodiRef = dataref.ref("proizvodi/" + getFormData(container).id);
+      const sufiksZaCuvanje = jeEditovanje ? index : duzinaProizvoda;
+      console.log(sufiksZaCuvanje, index, duzinaProizvoda);
+      var proizvodiRef = dataref.ref("proizvodi/" + sufiksZaCuvanje);
       proizvodiRef.set(getFormData(container)).then(function () {
         container.css({ display: "none" });
+        container.trigger("reset");
+        for (let i = 0; i < 5; i++) {
+          const element = $(
+            "#" + sufiks + Object.getOwnPropertyNames(proizvod)[i]
+          );
+          element.val("");
+        }
         getProducts();
       });
 
