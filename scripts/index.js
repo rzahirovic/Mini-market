@@ -1,11 +1,3 @@
-let proizvodi = [
-  { id: 0, naziv: "Brasno", kategorija: 0, stanje: 10, cijena: 20 },
-  { id: 1, naziv: "Drvena vrata", kategorija: 3, stanje: 20, cijena: 100 },
-  { id: 2, naziv: "Hlace", kategorija: 4, stanje: 8, cijena: 10 },
-  { id: 3, naziv: "Elektricni sporet", kategorija: 1, stanje: 5, cijena: 350 },
-  { id: 4, naziv: "Krevet", kategorija: 2, stanje: 24, cijena: 200 },
-  { id: 5, naziv: "Nes kafa", kategorija: 0, stanje: 200, cijena: 0.5 },
-];
 const kategorije = [
   "Prehrambeni",
   "Bjela tehnika",
@@ -14,6 +6,7 @@ const kategorije = [
   "Odjeca",
 ];
 let duzinaProizvoda = 0;
+let proizvodi = [];
 $(document).ready(function () {
   getProducts();
 });
@@ -21,34 +14,42 @@ async function getProducts() {
   var dataref = firebase.database();
   var proizvodiRef = dataref.ref("proizvodi");
   const snapshot = await proizvodiRef.once("value");
-  duzinaProizvoda = snapshot.val().length;
+  proizvodi = snapshot.val();
   krerajListuProizvoda(snapshot.val(), kategorije);
 }
 function krerajListuProizvoda(proizvodi, kategorije) {
   console.log(proizvodi, "usao");
   const container = $("#proizvodiContainer");
   let html = "";
-  proizvodi.map((item, index) => {
-    const dodajSivuBoju = index % 2 !== 0 ? "siva-boja" : "";
-    html += `<div id="proizvod-${
-      item.id
-    }" class='proizvod-container ${dodajSivuBoju}' ><p>${item.id}</p><p>${
-      item.naziv
-    }</p> <p>${kategorije[item.kategorija]}</p> <p> ${item.stanje}</p> <p>${
-      item.cijena
-    }KM</p> </div>`;
-  });
+  proizvodi &&
+    proizvodi.map((item, index) => {
+      const dodajSivuBoju = index % 2 !== 0 ? "siva-boja" : "";
+      html += `<div id="proizvod-${
+        item.id
+      }" class='proizvod-container ${dodajSivuBoju}' ><p>${item.id}</p><p>${
+        item.naziv
+      }</p> <p>${kategorije[item.kategorija]}</p> <p> ${item.stanje}</p> <p>${
+        item.cijena
+      }KM</p> </div>`;
+    });
   container.html(html);
-  proizvodi.map((item, index) =>
-    $("#proizvod-" + item.id).click(function () {
-      urediProizvod("proizvod-", item, true, index);
-    })
-  );
+  if (proizvodi)
+    proizvodi.map((item, index) =>
+      $("#proizvod-" + item.id).click(function () {
+        urediProizvod("proizvod-", item, true, index);
+      })
+    );
   dodajProizvod();
 }
 
 function urediProizvod(sufiks, proizvod, jeEditovanje, index) {
   const container = $("#forma-uredjivanje");
+  const deleteButton = $("#brisanje-uredjivanje");
+  if (!jeEditovanje) {
+    deleteButton.hide();
+  } else {
+    deleteButton.show();
+  }
   if (container.css("display") === "none") {
     $("#zatvori-uredjivanje").click(function () {
       container.css({ display: "none" });
@@ -70,22 +71,33 @@ function urediProizvod(sufiks, proizvod, jeEditovanje, index) {
     }
     $("#potvrdi-uredjivanje").click(function () {
       var dataref = firebase.database();
-      const sufiksZaCuvanje = jeEditovanje ? index : duzinaProizvoda;
+      let duzina = 0;
+      if (proizvodi) duzina = proizvodi.length;
+      const sufiksZaCuvanje = jeEditovanje ? index : duzina;
       console.log(sufiksZaCuvanje, index, duzinaProizvoda);
       var proizvodiRef = dataref.ref("proizvodi/" + sufiksZaCuvanje);
       proizvodiRef.set(getFormData(container)).then(function () {
         container.css({ display: "none" });
         container.trigger("reset");
-        for (let i = 0; i < 5; i++) {
-          const element = $(
-            "#" + sufiks + Object.getOwnPropertyNames(proizvod)[i]
-          );
-          element.val("");
-        }
         getProducts();
       });
 
       console.log(getFormData(container));
+    });
+    deleteButton.click(function () {
+      var dataref = firebase.database();
+      var proizvodiRef = dataref.ref("proizvodi");
+      console.log(index);
+      let value = proizvodi.filter(function (item) {
+        console.log("usaoooo", item, proizvod);
+        return item.id !== proizvod.id;
+      });
+      console.log(value);
+      proizvodiRef.set(value).then(function () {
+        container.css({ display: "none" });
+        container.trigger("reset");
+        getProducts();
+      });
     });
   }
 }
