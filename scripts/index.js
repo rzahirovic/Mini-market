@@ -9,6 +9,12 @@ let duzinaProizvoda = 0;
 let proizvodi = [];
 $(document).ready(function () {
   getProducts();
+  $("#pretrazivanje-input").on("keyup", function () {
+    var value = $(this).val().toLowerCase();
+    $("#proizvodiContainer div").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  });
 });
 async function getProducts() {
   var dataref = firebase.database();
@@ -18,7 +24,6 @@ async function getProducts() {
   krerajListuProizvoda(snapshot.val(), kategorije);
 }
 function krerajListuProizvoda(proizvodi, kategorije) {
-  console.log(proizvodi, "usao");
   const container = $("#proizvodiContainer");
   let html = "";
   proizvodi &&
