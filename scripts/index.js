@@ -9,6 +9,7 @@ let duzinaProizvoda = 0;
 let proizvodi = [];
 $(document).ready(function () {
   getProducts();
+  getProdajaHistory();
   $("#pretrazivanje-input").on("keyup", function () {
     var value = $(this).val().toLowerCase();
     $("#proizvodiContainer div").filter(function () {
@@ -176,4 +177,23 @@ async function getProdajaHistory() {
   var prodajaRef = dataref.ref("prodaja");
   let snapshot = await prodajaRef.once("value");
   prodaja = snapshot.val();
+  prikaziProdaju(prodaja);
+}
+function prikaziProdaju(prodaja) {
+  const container = $("#prodajaContainer");
+  console.log("usao", prodaja);
+  let html = "";
+  if (prodaja) {
+    prodaja.reverse().map((item, index) => {
+      const dodajSivuBoju = index % 2 !== 0 ? "siva-boja" : "";
+      html += `<div id="prodaja-${
+        item.id
+      }" class='prodaja-container ${dodajSivuBoju}' ><p>${item.id}</p><p>${
+        item.naziv
+      }</p> <p>${item.kolicina}</p> <p> ${moment(
+        item.datum
+      ).fromNow()}</p></div>`;
+    });
+    container.html(html);
+  }
 }

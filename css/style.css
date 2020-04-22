@@ -139,3 +139,32 @@ select {
 .prodaj-container div {
   margin-top: 10px;
 }
+.prodaja-cotainer {
+  display: flex;
+
+  flex-direction: column;
+  width: 800px;
+  height: 400px;
+  overflow: scroll;
+}
+.prodaja-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.prodaja-cotainer p {
+  width: 25%;
+  text-align: center;
+}
+.prodaja-header {
+  display: flex;
+  flex-direction: row;
+  width: 800px;
+  overflow: scroll;
+  justify-content: space-between;
+  align-self: center;
+}
+.prodaja-header p {
+  width: 25%;
+  text-align: center;
+}
