@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase.js"></script>
+    <link rel="stylesheet" href="../css/style.css" type="text/css">
+
+</head>
+
+<body>
+    <div class="screen-container">
+        <div class='proizvodi-header'>
+            <h2 class="header-title">Lista proizvoda</h2>
+            <div id='dodajElement' class="button-edit">Dodaj</div>
+        </div>
+        <div class='proizvodi-header siva-boja'>
+            <p>Sifra</p>
+            <p>Naziv</p>
+            <p>Kategorija</p>
+            <p> Stanje</p>
+            <p>Cijena</p>
+        </div>
+        <div id='proizvodiContainer' class="proizvodi-cotainer">
+
+        </div>
+        <form id='forma-uredjivanje' class="uredjivanje-proizvoda-container">
+            <div class="button-exit" id='zatvori-uredjivanje'>
+                X
+            </div>
+            <input id='proizvod-id' type="text" name='id' placeholder="Unesite sifru vaseg proizvoda" />
+            <input id='proizvod-naziv' type="text" name='naziv' placeholder="Unesite naziv vaseg proizvoda" />
+            <select name='kategorija' id='proizvod-kategorija' id='section-category'>
+                <option value="0" selected>Prehrambeni</option>
+                <option value="1">Bjela tehnika</option>
+                <option value="2">Namjestaj</option>
+                <option value="3">Stolarija</option>
+                <option value="4">Odjeca</option>
+            </select>
+            <input id='proizvod-stanje' type="text" name='stanje' placeholder="Unesite stanje vaseg proizvoda" />
+            <input id='proizvod-cijena' type="text" name='cijena' placeholder="Unesite cijenu vaseg proizvoda" />
+            <div id='potvrdi-uredjivanje' class="button-edit">
+                Potvrdi
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDrvc8f59OfojHxlK6jwMAm_vZuelnwHTQ",
+            authDomain: "minimarket-4eacf.firebaseapp.com",
+            databaseURL: "https://minimarket-4eacf.firebaseio.com",
+            projectId: "minimarket-4eacf",
+            storageBucket: "minimarket-4eacf.appspot.com",
+            messagingSenderId: "433300496116",
+            appId: "1:433300496116:web:f35d4db522fe65fcc408a1",
+            measurementId: "G-WN9KWNBDNN"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="../scripts/index.js"></script>
+</body>
+
+</html>

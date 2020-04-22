@@ -1,0 +1,97 @@
+input[type="text"],
+select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.proizvodi-cotainer {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  height: 400px;
+  overflow: scroll;
+}
+.proizvod-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.proizvodi-cotainer p {
+  width: 20%;
+  text-align: center;
+}
+.proizvodi-header {
+  display: flex;
+  flex-direction: row;
+  width: 800px;
+  overflow: scroll;
+  justify-content: space-between;
+}
+.proizvodi-header p {
+  width: 20%;
+  text-align: center;
+}
+.siva-boja {
+  background-color: gray;
+  color: white;
+}
+.uredjivanje-proizvoda-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 500px;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+}
+.button-edit {
+  background-color: black;
+  color: white;
+  border-radius: 15px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  align-self: center;
+  transition: all 0.5s ease;
+}
+.button-edit:active {
+  opacity: 0.7;
+}
+.button-exit {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  transition: all 0.5s ease;
+}
+.button-edit:hover {
+  background-color: yellow;
+  color: black;
+}
+.button-exit:hover {
+  background-color: yellow;
+  color: black;
+}
+.button-exit:active {
+  opacity: 0.7;
+}
+.header-title {
+  font-size: 25px;
+}
