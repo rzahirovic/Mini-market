@@ -40,17 +40,31 @@
             </select>
             <input id='proizvod-stanje' type="text" name='stanje' placeholder="Unesite stanje vaseg proizvoda" />
             <input id='proizvod-cijena' type="text" name='cijena' placeholder="Unesite cijenu vaseg proizvoda" />
-            <div id='potvrdi-uredjivanje' class="button-edit">
+            <div class="button-container">
+                <div id='potvrdi-uredjivanje' class="button-edit">
+                    Potvrdi
+                </div>
+                <div id='brisanje-uredjivanje' class="button-edit">
+                    Obrisi
+                </div>
+                <div id='prodaj-proizvod' class="button-edit">
+                    Prodaj
+                </div>
+            </div>
+
+        </form>
+        <div id='prodajModal' class="prodaj-container">
+            <h2>Koliko zelite da prodate proizvoda?</h2>
+            <p id='max-prodaja'>10</p>
+            <input type="text" id='broj-proizvoda' placeholder="Unesite koliko zelite proizvoda" />
+            <div id='potvrdi-prodaju' class="button-edit">
                 Potvrdi
             </div>
-            <div id='brisanje-uredjivanje' class="button-edit">
-                Obrisi
-            </div>
-        </form>
+        </div>
+
     </div>
 
     <script>
-        // Your web app's Firebase configuration
         var firebaseConfig = {
             apiKey: "AIzaSyDrvc8f59OfojHxlK6jwMAm_vZuelnwHTQ",
             authDomain: "minimarket-4eacf.firebaseapp.com",
@@ -61,7 +75,6 @@
             appId: "1:433300496116:web:f35d4db522fe65fcc408a1",
             measurementId: "G-WN9KWNBDNN"
         };
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
     </script>
     <script src="../scripts/index.js"></script>

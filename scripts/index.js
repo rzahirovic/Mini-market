@@ -50,10 +50,14 @@ function krerajListuProizvoda(proizvodi, kategorije) {
 function urediProizvod(sufiks, proizvod, jeEditovanje, index) {
   const container = $("#forma-uredjivanje");
   const deleteButton = $("#brisanje-uredjivanje");
+  const prodajButton = $("#prodaj-proizvod");
   if (!jeEditovanje) {
     deleteButton.hide();
+    prodajButton.hide();
   } else {
     deleteButton.show();
+    prodajButton.show();
+    prodajProizvod(proizvod, container, index);
   }
   if (container.css("display") === "none") {
     $("#zatvori-uredjivanje").click(function () {
@@ -121,4 +125,55 @@ function getFormData($form) {
   });
 
   return indexed_array;
+}
+let prodaja = [];
+
+function prodajProizvod(proizvod, container, index) {
+  getProdajaHistory();
+  const prodajButton = $("#prodaj-proizvod");
+  const modal = $("#prodajModal");
+  const maxBroj = $("#max-prodaja");
+  const unijetBroj = $("#broj-proizvoda");
+  const potvrdiProdaju = $("#potvrdi-prodaju");
+  unijetBroj.val("");
+  prodajButton.click(function () {
+    modal.css({ display: "flex" });
+  });
+  maxBroj.text("Broj proizvoda koje mozete prodati " + proizvod.stanje);
+  potvrdiProdaju.click(function () {
+    if (unijetBroj.val() && unijetBroj.val() < proizvod.stanje) {
+      var dataref = firebase.database();
+      let duzina = 0;
+      console.log(prodaja);
+      if (prodaja) duzina = prodaja.length;
+      var prodajaRef = dataref.ref("prodaja/" + duzina);
+      prodajaRef
+        .set({
+          naziv: proizvod.naziv,
+          kolicina: unijetBroj.val(),
+          datum: new Date().getTime(),
+          id: proizvod.id,
+        })
+        .then(function () {
+          let proizvodRef = dataref.ref("proizvodi/" + index);
+          proizvodRef
+            .set({
+              ...proizvod,
+              stanje: proizvod.stanje - unijetBroj.val(),
+            })
+            .then(function () {
+              getProducts();
+              getProdajaHistory();
+              modal.css({ display: "none" });
+              container.css({ display: "none" });
+            });
+        });
+    }
+  });
+}
+async function getProdajaHistory() {
+  var dataref = firebase.database();
+  var prodajaRef = dataref.ref("prodaja");
+  let snapshot = await prodajaRef.once("value");
+  prodaja = snapshot.val();
 }
